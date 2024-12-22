@@ -15,6 +15,7 @@ interface TaskItemProps {
 	onDragEnd: () => void;
 	isDragging: boolean;
 	draggable: boolean;
+	pinTask: (task: Task) => void;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -24,6 +25,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
 	onDragStart,
 	onDragEnd,
 	isDragging,
+	pinTask,
 }) => {
 	const [showActions, setShowActions] = useState<boolean>(false);
 	const [showViewTask, setShowViewTask] = useState<boolean>(false);
@@ -93,6 +95,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
 					taskID={task.id}
 					onEdit={openEditTask}
 					onView={openViewTask}
+					onPin={() => pinTask(task)}
 				/>
 			)}
 

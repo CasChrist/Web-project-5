@@ -5,6 +5,7 @@ export interface Task {
 	id: number;
 	title: string;
 	description: string;
+	isPinned?: boolean;
 }
 
 const taskSlice = createSlice({
@@ -42,10 +43,27 @@ const taskSlice = createSlice({
 			storage.setTasks(state);
 			console.log('Updated tasks:', state);
 		},
+
+		pinTask: (state, action: PayloadAction<Task>) => {
+			const task = state.find((task) => task.id === action.payload.id);
+			if (task && !task.isPinned) {
+				const pinnedTasksCount = state.filter((task) => task.isPinned).length;
+				if (pinnedTasksCount < 3) {
+					task.isPinned = true;
+				}
+			}
+		},
+
+		unpinTask: (state, action: PayloadAction<{ id: number }>) => {
+			const task = state.find((task) => task.id === action.payload.id);
+			if (task) {
+				task.isPinned = false;
+			}
+		},
 	},
 });
 
-export const { addTask, deleteTask, updateTask, reorderTasks } =
+export const { addTask, deleteTask, updateTask, reorderTasks, pinTask, unpinTask } =
 	taskSlice.actions;
 
 export default taskSlice.reducer;

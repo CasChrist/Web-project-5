@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TaskItem from './taskItem';
 import { useDispatch } from 'react-redux';
-import { reorderTasks, Task } from './redux/taskSlice';
+import { reorderTasks, Task, pinTask, unpinTask } from './redux/taskSlice';
 
 interface TaskListProps {
 	tasks: Task[];
@@ -34,12 +34,24 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
 		e.preventDefault();
 	}
 
+	const handlePinTask = (task: Task) => {
+		if (task.isPinned) {
+			dispatch(unpinTask(task))
+		} else {
+			dispatch(pinTask(task))
+		}
+	};
+
+	const sortedTasks = [...tasks].sort((a, b) => {
+		return (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0)
+	});
+
 	return (
 		<div className="tasks">
-			{tasks.length === 0 ? (
+			{sortedTasks.length === 0 ? (
 				<p className="tasks-none">No tasks</p>
 			) : (
-				tasks.map((task, index) => (
+				sortedTasks.map((task, index) => (
 					<TaskItem
 						key={task.id}
 						task={task}
@@ -49,6 +61,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
 						onDragEnd={handleDragEnd}
 						draggable={true}
 						isDragging={draggingIndex === index}
+						pinTask={() => handlePinTask(task)}
 					/>
 				))
 			)}

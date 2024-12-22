@@ -5,9 +5,10 @@ interface ActionBarProps {
 	taskID: number;
 	onEdit: () => void;
 	onView: (taskID: number) => void;
+	onPin: (taskID: number) => void;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ taskID, onEdit, onView }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ taskID, onEdit, onView, onPin }) => {
 	const [showShareTask, setShowShareTask] = useState<boolean>(false);
 
 	const toggleShareTask = () => {
@@ -30,6 +31,11 @@ const ActionBar: React.FC<ActionBarProps> = ({ taskID, onEdit, onView }) => {
 					onClick={toggleShareTask}>
 					<img src="./src/assets/share.svg" alt="Share" />
 				</button>
+				<button
+					className="tasks-elem-container__actions-pin"
+					onClick={() => onPin(taskID)}>
+						<img src="./src/assets/heart.png" alt="Pin" />
+					</button>
 			</div>
 
 			{showShareTask && <ShareTask taskID={taskID} onClose={toggleShareTask} />}
